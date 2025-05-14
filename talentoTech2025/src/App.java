@@ -37,7 +37,7 @@ public class App {
                     buscarActualizarProducto(opcion);
                     break;
                 case 4:
-                    // eliminarProducto();
+                    eliminarProducto(opcion);
                     break;
                 case 5:
                     // crearPedido();
@@ -67,7 +67,7 @@ public class App {
 
         Producto nuevoProducto = new Producto(nombre, precio, stock);
         listaProductos.add(nuevoProducto);
-        System.out.println("Producto agregado con éxito.");
+        System.out.println("\n ¡Producto agregado con éxito! \n");
     }
 
     public static void listarProductos() {
@@ -109,6 +109,30 @@ public class App {
                 } else {
                     System.out.println("El stock no puede ser negativo.");
                 }
+            }
+        } else {
+            System.out.println("Producto no encontrado.");
+        }
+    }
+
+    public static void eliminarProducto(Scanner scanner) {
+        System.out.println("Ingrese el ID del producto a eliminar:");
+        int id = scanner.nextInt();
+
+        Producto productoAEliminar = null;
+        for (Producto p : listaProductos) {
+            if (p.getId() == id) {
+                productoAEliminar = p;
+                break;
+            }
+        }
+
+        if (productoAEliminar != null) {
+            System.out.println("¿Está seguro? (1=Sí, 2=No)");
+            int confirmacion = scanner.nextInt();
+            if (confirmacion == 1) {
+                listaProductos.remove(productoAEliminar);
+                System.out.println("Producto eliminado.");
             }
         } else {
             System.out.println("Producto no encontrado.");
