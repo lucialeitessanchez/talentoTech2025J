@@ -28,10 +28,10 @@ public class App {
 
             switch (entrada) {
                 case 1:
-                    // agregarProducto();
+                    agregarProducto(opcion);
                     break;
                 case 2:
-                    // listarProductos();
+                    listarProductos();
                     break;
                 case 3:
                     // buscarActualizarProducto();
@@ -68,6 +68,17 @@ public class App {
         Producto nuevoProducto = new Producto(nombre, precio, stock);
         listaProductos.add(nuevoProducto);
         System.out.println("Producto agregado con éxito.");
+    }
+
+    public static void listarProductos() {
+        if (listaProductos.isEmpty()) { // si la lista esta vacia
+            System.out.println("No hay productos registrados.");
+        } else {
+            System.out.println("Listado de productos:");
+            for (Producto p : listaProductos) {
+                p.mostrar();
+            }
+        }
     }
 
     public static void calcularTotalProductos(ArrayList<Producto> carrito) {
