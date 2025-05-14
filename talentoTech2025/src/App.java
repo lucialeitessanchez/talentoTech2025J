@@ -44,7 +44,7 @@ public class App {
                     crearPedido(opcion);
                     break;
                 case 6:
-                    // listarPedidos();
+                    listarPedido();
                     break;
                 case 7:
                     System.out.println("¡Gracias por usar el sistema!");
@@ -152,7 +152,7 @@ public class App {
             try {
                 id = scanner.nextInt();
             } catch (Exception e) {
-                System.out.println("Entrada inválida. Ingrese un número.");
+                System.out.println("\n \nEntrada inválida. Ingrese un número.\n");
                 scanner.nextLine(); // Limpiar buffer
                 continue;
             }
@@ -169,29 +169,29 @@ public class App {
             }
 
             if (p == null) {
-                System.out.println("Producto no encontrado.");
+                System.out.println("\n \nProducto no encontrado.\n ");
                 continue;
             }
 
-            System.out.println("Ingrese cantidad:");
+            System.out.println("\n Ingrese cantidad:");
             int cantidad;
             try {
                 cantidad = scanner.nextInt();
             } catch (Exception e) {
-                System.out.println("Cantidad inválida.");
+                System.out.println("\n\n Cantidad inválida.\n");
                 scanner.nextLine();
                 continue;
             }
 
             if (cantidad <= 0) {
-                System.out.println("La cantidad debe ser mayor a cero.");
+                System.out.println("\n \nLa cantidad debe ser mayor a cero.\n");
             } else if (cantidad > p.getCantidadEnStock()) {
-                System.out.println("Stock insuficiente. Disponible: " + p.getCantidadEnStock());
+                System.out.println("\n \nStock insuficiente. Disponible: " + p.getCantidadEnStock());
             } else {
                 p.setCantidadEnStock(p.getCantidadEnStock() - cantidad);
                 nuevoPedido.agregarLinea(new LineaPedido(p, cantidad));
                 seAgregoAlMenosUnProducto = true;
-                System.out.println("Producto agregado al pedido.");
+                System.out.println("\n \n Producto agregado al pedido.\n");
             }
         }
 
@@ -204,12 +204,25 @@ public class App {
         }
     }
 
-    public static void calcularTotalProductos(ArrayList<Producto> carrito) {
-        double costoTotal = 0;
-        for (Producto producto : carrito) {
-            // producto.print();
-            // costoTotal += producto.precio;
+    public static void listarPedido() {
+        if (listaPedidos.isEmpty()) {
+            System.out.println("\n \n No hay pedidos registrados.\n");
+        } else {
+            for (Pedido p : listaPedidos) {
+                p.mostrar();
+                System.out.println("---------------");
+            }
         }
-        System.out.println("Costo total del carrito: $" + costoTotal);
     }
+
+    /*
+     * public static void calcularTotalProductos(ArrayList<Producto> carrito) {
+     * double costoTotal = 0;
+     * for (Producto producto : carrito) {
+     * // producto.print();
+     * // costoTotal += producto.precio;
+     * }
+     * System.out.println("Costo total del carrito: $" + costoTotal);
+     * }
+     */
 }

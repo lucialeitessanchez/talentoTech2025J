@@ -26,7 +26,7 @@ public class Pedido {
 
     public void mostrar() {
         System.out.println("==================================");
-        System.out.println("🧾 Pedido #" + id);
+        System.out.println(" = Pedido #" + id); // aca iria un emoji pero no anda
         System.out.println("----------------------------------");
         for (LineaPedido lp : lineas) {
             lp.mostrar();
