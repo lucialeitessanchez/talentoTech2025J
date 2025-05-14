@@ -3,6 +3,7 @@ import java.util.Scanner;
 
 public class App {
     private static ArrayList<Producto> listaProductos = new ArrayList<>();
+    private static ArrayList<Pedido> listaPedidos = new ArrayList<>();
 
     public static void main(String[] args) throws Exception {
         menu();
@@ -40,7 +41,7 @@ public class App {
                     eliminarProducto(opcion);
                     break;
                 case 5:
-                    // crearPedido();
+                    crearPedido(opcion);
                     break;
                 case 6:
                     // listarPedidos();
@@ -136,6 +137,70 @@ public class App {
             }
         } else {
             System.out.println("Producto no encontrado.");
+        }
+    }
+
+    public static void crearPedido(Scanner scanner) {
+        Pedido nuevoPedido = new Pedido();
+        boolean seAgregoAlMenosUnProducto = false;
+
+        while (true) {
+            listarProductos();
+            System.out.println("\n Ingrese ID del producto (o 0 para terminar pedido):");
+
+            int id;
+            try {
+                id = scanner.nextInt();
+            } catch (Exception e) {
+                System.out.println("Entrada inválida. Ingrese un número.");
+                scanner.nextLine(); // Limpiar buffer
+                continue;
+            }
+
+            if (id == 0)
+                break;
+
+            Producto p = null;
+            for (Producto prod : listaProductos) {
+                if (prod.getId() == id) {
+                    p = prod;
+                    break;
+                }
+            }
+
+            if (p == null) {
+                System.out.println("Producto no encontrado.");
+                continue;
+            }
+
+            System.out.println("Ingrese cantidad:");
+            int cantidad;
+            try {
+                cantidad = scanner.nextInt();
+            } catch (Exception e) {
+                System.out.println("Cantidad inválida.");
+                scanner.nextLine();
+                continue;
+            }
+
+            if (cantidad <= 0) {
+                System.out.println("La cantidad debe ser mayor a cero.");
+            } else if (cantidad > p.getCantidadEnStock()) {
+                System.out.println("Stock insuficiente. Disponible: " + p.getCantidadEnStock());
+            } else {
+                p.setCantidadEnStock(p.getCantidadEnStock() - cantidad);
+                nuevoPedido.agregarLinea(new LineaPedido(p, cantidad));
+                seAgregoAlMenosUnProducto = true;
+                System.out.println("Producto agregado al pedido.");
+            }
+        }
+
+        if (seAgregoAlMenosUnProducto) {
+            listaPedidos.add(nuevoPedido);
+            System.out.println("\nPedido creado exitosamente:");
+            nuevoPedido.mostrar();
+        } else {
+            System.out.println("No se creó el pedido. No se agregaron productos.");
         }
     }
 

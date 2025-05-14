@@ -25,11 +25,14 @@ public class Pedido {
     }
 
     public void mostrar() {
-        System.out.println("Pedido #" + id);
+        System.out.println("==================================");
+        System.out.println("🧾 Pedido #" + id);
+        System.out.println("----------------------------------");
         for (LineaPedido lp : lineas) {
             lp.mostrar();
         }
-        System.out.println("TOTAL: $" + calcularTotal());
+        System.out.printf("----------------------------------%nTOTAL: $%.2f%n", calcularTotal());
+        System.out.println("==================================");
     }
 
     public int getId() {
