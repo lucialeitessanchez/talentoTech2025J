@@ -34,7 +34,7 @@ public class App {
                     listarProductos();
                     break;
                 case 3:
-                    // buscarActualizarProducto();
+                    buscarActualizarProducto(opcion);
                     break;
                 case 4:
                     // eliminarProducto();
@@ -78,6 +78,40 @@ public class App {
             for (Producto p : listaProductos) {
                 p.mostrar();
             }
+        }
+    }
+
+    public static void buscarActualizarProducto(Scanner scanner) {
+        System.out.println("Ingrese el ID del producto a buscar:");
+        int idBuscado = scanner.nextInt();
+
+        Producto productoEncontrado = null;
+        for (Producto p : listaProductos) {
+            if (p.getId() == idBuscado) {
+                productoEncontrado = p;
+                break;
+            }
+        }
+
+        if (productoEncontrado != null) {
+            productoEncontrado.mostrar();
+            System.out.println("¿Desea actualizar este producto? (1=Sí, 2=No)");
+            int opcion = scanner.nextInt();
+            if (opcion == 1) {
+                System.out.println("Nuevo precio:");
+                double nuevoPrecio = scanner.nextDouble();
+                System.out.println("Nuevo stock:");
+                int nuevoStock = scanner.nextInt();
+                if (nuevoStock >= 0) {
+                    productoEncontrado.setPrecio(nuevoPrecio);
+                    productoEncontrado.setCantidadEnStock(nuevoStock);
+                    System.out.println("Producto actualizado.");
+                } else {
+                    System.out.println("El stock no puede ser negativo.");
+                }
+            }
+        } else {
+            System.out.println("Producto no encontrado.");
         }
     }
 
