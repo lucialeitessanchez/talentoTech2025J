@@ -2,6 +2,8 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class App {
+    private static ArrayList<Producto> listaProductos = new ArrayList<>();
+
     public static void main(String[] args) throws Exception {
         menu();
     }
@@ -52,13 +54,20 @@ public class App {
         } while (entrada != 7);
     }
 
-    void agregarProducto() {
-        Producto p = new Producto();
-        /*
-         * p.nombre = " "; // lo que ingrese
-         * p.precio = 0.0; // lo que ingrese
-         * p.cantidadEnStock = 1;
-         */
+    public static void agregarProducto(Scanner scanner) {
+        System.out.println("Ingrese el nombre del producto:");
+        scanner.nextLine(); // Limpiar buffer
+        String nombre = scanner.nextLine();
+
+        System.out.println("Ingrese el precio:");
+        double precio = scanner.nextDouble();
+
+        System.out.println("Ingrese la cantidad en stock:");
+        int stock = scanner.nextInt();
+
+        Producto nuevoProducto = new Producto(nombre, precio, stock);
+        listaProductos.add(nuevoProducto);
+        System.out.println("Producto agregado con éxito.");
     }
 
     public static void calcularTotalProductos(ArrayList<Producto> carrito) {
