@@ -1,56 +1,42 @@
 package talentotech.java.proyectointegrador.Entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
+@Entity
 public class Producto {
-    private static int contador = 1;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    private int id;
     private String nombre;
     private double precio;
     private int cantidadEnStock;
+    private int cantidadAComprar;
+    private String descripcion;
 
     public void Producto() {
 
     }
 
     public Producto() {
-        this.id = contador++;
     }
 
     public Producto(String nombre, double precio, int cantidadEnStock) {
-        this.id = contador++;
+        
         this.nombre = nombre;
         this.precio = precio;
         this.cantidadEnStock = cantidadEnStock;
+        this.cantidadAComprar = 0;
     }
 
-    public int getId() {
-        return id;
-    }
 
-    public String getNombre() {
-        return nombre;
-    }
-
-    public double getPrecio() {
-        return precio;
-    }
-
-    public int getCantidadEnStock() {
-        return cantidadEnStock;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public void setPrecio(double precio) {
-        this.precio = precio;
-    }
-
-    public void setCantidadEnStock(int cantidadEnStock) {
-        this.cantidadEnStock = cantidadEnStock;
-    }
 
     public boolean descontarStock(int cantidad) {
         if (cantidad <= cantidadEnStock) {

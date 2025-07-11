@@ -43,7 +43,7 @@ public class ProductoController {
     }
     
     // /buscar?nombre="mouse" el requestParam lo usamos para pasar datos de filtros
-   /*  @GetMapping("/buscar")
+    /*  @GetMapping("/buscar")
     public String buscarProductoPorNombre(@RequestParam String nombre) {
         return new String();
     }*/
@@ -64,6 +64,8 @@ public class ProductoController {
 
         return productosEncontrados;
     }
+
+    /* 
     private Producto buscarPorId(Long id) {
         for (Producto producto : productos){
             if (producto.getId() == id){
@@ -73,7 +75,7 @@ public class ProductoController {
 
         // si llega aca es porque no encontro el producto
         return null;
-    }
+    }*/
     @GetMapping("/find/{productId}") //lo que le paso por param tiene el mismo nombre que la llamada
     public String buscarProducto(@PathVariable Long productId) { //tiene que coincidir lo que esta entre llaves con lo que le digo de pathvariable
         return this.buscarProducto(productId);
