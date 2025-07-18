@@ -24,7 +24,7 @@ public class Producto {
     public Producto() {
     }
 
-    public Producto(String nombre, double precio, int cantidadEnStock,String descripcion) {
+    public Producto(String nombre, Double precio, int cantidadEnStock,String descripcion) {
         
         this.nombre = nombre;
         this.precio = precio;
