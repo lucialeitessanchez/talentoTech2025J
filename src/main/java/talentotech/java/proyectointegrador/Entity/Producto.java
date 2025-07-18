@@ -16,24 +16,21 @@ public class Producto {
     private Long id;
 
     private String nombre;
-    private double precio;
+    private Double precio;
     private int cantidadEnStock;
     private int cantidadAComprar;
     private String descripcion;
 
-    public void Producto() {
-
-    }
-
     public Producto() {
     }
 
-    public Producto(String nombre, double precio, int cantidadEnStock) {
+    public Producto(String nombre, double precio, int cantidadEnStock,String descripcion) {
         
         this.nombre = nombre;
         this.precio = precio;
         this.cantidadEnStock = cantidadEnStock;
         this.cantidadAComprar = 0;
+        this.descripcion = descripcion;
     }
 
 

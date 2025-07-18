@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import talentotech.java.proyectointegrador.Dto.ProductResponseDTO;
 import talentotech.java.proyectointegrador.Entity.Producto;
+import talentotech.java.proyectointegrador.Exception.ProductoNotFoundException;
 import talentotech.java.proyectointegrador.Repository.ProductoRepository;
 
 @Service
@@ -31,10 +32,29 @@ public class ProductoService {
         return responseDTO;
     }
 
-    public Producto buscarPorId(Long id){
-        Producto encontrado = this.repository.findById(id).orElseThrow(()-> new ProductoNotFoundException(id.toString()));
+    public Producto buscarPorId(Long id) {
+        Optional<Producto> encontrado = this.repository.findById(id);
+        if (encontrado.isEmpty()){
+            throw new ProductoNotFoundException(id.toString());
+        }
+        return encontrado.get();
         
-        return encontrado;
-    }
+        }
+
+        public Producto editarProducto(Long id, Double nuevoPrecio){
+            Producto encontrado = this.buscarPorId(id);
+            encontrado.setPrecio(nuevoPrecio);
+            this.repository.save(encontrado); //esto guarda en la base de datos para borrar es igual pero con delete
+            return encontrado;
+        }
+        
+          // DELETE
+        public Producto eliminarProducto(Long id) {
+            Producto encontrado = this.buscarPorId(id);
+        
+            this.repository.delete(encontrado);
+        
+            return encontrado;
+        }
 
 }

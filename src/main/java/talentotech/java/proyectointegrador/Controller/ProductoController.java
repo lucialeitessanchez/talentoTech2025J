@@ -3,6 +3,7 @@ package talentotech.java.proyectointegrador.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import talentotech.java.proyectointegrador.Dto.ProductResponseDTO;
 import talentotech.java.proyectointegrador.Entity.Pedido;
 import talentotech.java.proyectointegrador.Entity.Producto;
 import talentotech.java.proyectointegrador.Service.ProductoService;
@@ -35,18 +36,39 @@ public class ProductoController {
     public ProductoController(ProductoService productoService){
         this.service = productoService;
     }
-    
-    //endpoints
     @PostMapping("/")
-    public String crearProducto(@RequestBody Producto producto) {
-        return agregarProducto(producto);
+    public ResponseEntity<ProductResponseDTO> creaarProducto(@RequestBody Producto producto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.service.agregarProducto(producto));
     }
+
+    @GetMapping("/{id}")
+    public Producto obtenerProductoPorId(@PathVariable Long id){
+        return this.service.buscarPorId(id);
+    }
+
+    @PutMapping("/{id}")
+    public Producto editarPrecioProducto(@PathVariable Long id, @RequestParam Double nuevoPrecio){
+        return this.service.editarProducto(id, nuevoPrecio);
+    }
+
+    @DeleteMapping("/{id}")
+    public Producto borrarProducto(@PathVariable Long id){
+        return this.service.eliminarProducto(id);
+    }
+    //endpoints
     
     // /buscar?nombre="mouse" el requestParam lo usamos para pasar datos de filtros
     /*  @GetMapping("/buscar")
     public String buscarProductoPorNombre(@RequestParam String nombre) {
         return new String();
-    }*/
+    }
+        
+     @PostMapping("/")
+    public String crearProducto(@RequestBody Producto producto) {
+        return agregarProducto(producto);
+    }
+    
+    */
     @GetMapping("/buscar")
     public List<Producto> obtenerProductos(@RequestParam String nombreBusqueda){
         return this.buscarProducto(nombreBusqueda);
@@ -65,7 +87,7 @@ public class ProductoController {
         return productosEncontrados;
     }
 
-    /* 
+    /*
     private Producto buscarPorId(Long id) {
         for (Producto producto : productos){
             if (producto.getId() == id){
@@ -75,7 +97,7 @@ public class ProductoController {
 
         // si llega aca es porque no encontro el producto
         return null;
-    }*/
+    }
     @GetMapping("/find/{productId}") //lo que le paso por param tiene el mismo nombre que la llamada
     public String buscarProducto(@PathVariable Long productId) { //tiene que coincidir lo que esta entre llaves con lo que le digo de pathvariable
         return this.buscarProducto(productId);
@@ -96,14 +118,15 @@ public class ProductoController {
         productos.add(producto);
         return " producto agregado correctamente \n"+ producto.getNombre();
     }
+
     public static void agregarPedido(ArrayList<Pedido> pedidos) {
         Pedido nuevoPedido = new Pedido();
         pedidos.add(nuevoPedido);
     }
 
-    @PutMapping("/{id}") //le va a llegar nuevo precio, son varias cosas usar el body
+    /*@PutMapping("/{id}") //le va a llegar nuevo precio, son varias cosas usar el body
     private Producto editarProducto(@PathVariable Long id,@RequestParam Double nuevoPrecio){
-        Producto producto = this.buscarPorId(id);
+        Producto producto = this.buscarProducto(id);
 
         if (producto == null){
             return null; //aca hacer una excepcion
@@ -116,7 +139,7 @@ public class ProductoController {
 
     // DELETE
     private Producto eliminarProducto(Long id) {
-        Producto producto = this.buscarPorId(id);
+        Producto producto = this.buscarProducto(id);
 
         if (producto == null){ // no se encontro
             return null;
@@ -125,7 +148,7 @@ public class ProductoController {
         this.productos.remove(producto);
 
         return producto;
-    }
+    }*/
 
     @GetMapping("")
         ResponseEntity<List<Producto>> listar() {
