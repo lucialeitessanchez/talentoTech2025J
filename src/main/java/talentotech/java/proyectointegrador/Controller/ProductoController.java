@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 import talentotech.java.proyectointegrador.Dto.ProductResponseDTO;
 import talentotech.java.proyectointegrador.Entity.Pedido;
 import talentotech.java.proyectointegrador.Entity.Producto;
+import talentotech.java.proyectointegrador.Exception.ProductoNotFoundException;
 import talentotech.java.proyectointegrador.Service.ProductoService;
 
 import java.util.ArrayList;
@@ -27,8 +28,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RestController
 @RequestMapping("/producto") //la ruta principal urlbase de producto
 public class ProductoController {
-    private ArrayList<Pedido> pedidos;
-    private ArrayList<Producto> productos;
 
     private ProductoService service;
 
@@ -36,123 +35,38 @@ public class ProductoController {
     public ProductoController(ProductoService productoService){
         this.service = productoService;
     }
-    @PostMapping("/")
-    public ResponseEntity<ProductResponseDTO> creaarProducto(@RequestBody Producto producto){
-        return ResponseEntity.status(HttpStatus.CREATED).body(this.service.agregarProducto(producto));
-    }
-
+    
     @GetMapping("/{id}")
-    public Producto obtenerProductoPorId(@PathVariable Long id){
-        return this.service.buscarPorId(id);
+    public ResponseEntity<Producto> obtenerProductoPorId(@PathVariable Long id) {
+        try {
+            Producto producto = service.buscarPorId(id);
+            return ResponseEntity.ok(producto);
+        } catch (ProductoNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
     @PutMapping("/{id}")
-    public Producto editarPrecioProducto(@PathVariable Long id, @RequestParam Double nuevoPrecio){
-        return this.service.editarProducto(id, nuevoPrecio);
+    public ResponseEntity<Producto> editarProducto(@PathVariable Long id, @RequestBody Producto productoActualizado) {
+        Producto actualizado = service.editarProducto(id, productoActualizado);
+        return ResponseEntity.ok(actualizado);
     }
 
     @DeleteMapping("/{id}")
-    public Producto borrarProducto(@PathVariable Long id){
-        return this.service.eliminarProducto(id);
+    public ResponseEntity<Void> borrarProducto(@PathVariable Long id) {
+        service.eliminarProducto(id);
+        return ResponseEntity.noContent().build();
     }
-    //endpoints
-    
-    // /buscar?nombre="mouse" el requestParam lo usamos para pasar datos de filtros
-    /*  @GetMapping("/buscar")
-    public String buscarProductoPorNombre(@RequestParam String nombre) {
-        return new String();
-    }
-        
-     @PostMapping("/")
-    public String crearProducto(@RequestBody Producto producto) {
-        return agregarProducto(producto);
-    }
-    
-    */
-    @GetMapping("/buscar")
-    public List<Producto> obtenerProductos(@RequestParam String nombreBusqueda){
-        return this.buscarProducto(nombreBusqueda);
-    }
-
-     // GET
-    private ArrayList<Producto> buscarProducto(String busqueda) {
-        ArrayList<Producto> productosEncontrados = new ArrayList<>();
-
-        for (Producto producto : productos){
-            if (producto.contieneNombre(busqueda)){
-                productosEncontrados.add(producto);
-            }
-        }
-
-        return productosEncontrados;
-    }
-
-    /*
-    private Producto buscarPorId(Long id) {
-        for (Producto producto : productos){
-            if (producto.getId() == id){
-                return producto;
-            }
-        }
-
-        // si llega aca es porque no encontro el producto
-        return null;
-    }
-    @GetMapping("/find/{productId}") //lo que le paso por param tiene el mismo nombre que la llamada
-    public String buscarProducto(@PathVariable Long productId) { //tiene que coincidir lo que esta entre llaves con lo que le digo de pathvariable
-        return this.buscarProducto(productId);
-    }
-
-    @PutMapping("/{id}")
-    public Producto editarPrecioProducto(@PathVariable Long id, @RequestParam Double nuevoPrecio){
-        return this.editarProducto(id, nuevoPrecio);
-    }
-
-    @DeleteMapping("/{id}")
-    public Producto borrarProducto(@PathVariable Long id){
-        return this.eliminarProducto(id);
-    }
-    
-    public String agregarProducto(Producto producto) {
-        
-        productos.add(producto);
-        return " producto agregado correctamente \n"+ producto.getNombre();
-    }
-
-    public static void agregarPedido(ArrayList<Pedido> pedidos) {
-        Pedido nuevoPedido = new Pedido();
-        pedidos.add(nuevoPedido);
-    }
-
-    /*@PutMapping("/{id}") //le va a llegar nuevo precio, son varias cosas usar el body
-    private Producto editarProducto(@PathVariable Long id,@RequestParam Double nuevoPrecio){
-        Producto producto = this.buscarProducto(id);
-
-        if (producto == null){
-            return null; //aca hacer una excepcion
-        }
-
-        producto.setPrecio(nuevoPrecio);
-
-        return producto;
-    }
-
-    // DELETE
-    private Producto eliminarProducto(Long id) {
-        Producto producto = this.buscarProducto(id);
-
-        if (producto == null){ // no se encontro
-            return null;
-        }
-
-        this.productos.remove(producto);
-
-        return producto;
-    }*/
 
     @GetMapping("")
-        ResponseEntity<List<Producto>> listar() {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(this.service.listarProductos()); 
+    public ResponseEntity<List<Producto>> listar() {
+        return ResponseEntity.ok(service.listarProductos());
+    }
+
+    @GetMapping("/buscar")
+    public ResponseEntity<List<Producto>> buscarPorNombre(@RequestParam String nombreBusqueda) {
+        List<Producto> resultados = service.buscarPorNombre(nombreBusqueda);
+        return ResponseEntity.ok(resultados);
     }
     
 

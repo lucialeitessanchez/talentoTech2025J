@@ -25,36 +25,64 @@ public class ProductoService {
         return this.repository.findAll();
     }
 
-    public ProductResponseDTO agregarProducto(Producto producto){
-        this.repository.save(producto);
+    public ProductResponseDTO agregarProducto(Producto producto) {
+        validarProducto(producto); // validación
+        repository.save(producto);
         ProductResponseDTO responseDTO = new ProductResponseDTO();
-        responseDTO.setMessage("creado");
+        responseDTO.setMessage("Producto creado correctamente");
         return responseDTO;
     }
 
     public Producto buscarPorId(Long id) {
-        Optional<Producto> encontrado = this.repository.findById(id);
-        if (encontrado.isEmpty()){
-            throw new ProductoNotFoundException(id.toString());
-        }
-        return encontrado.get();
-        
+        return repository.findById(id)
+            .orElseThrow(() -> new ProductoNotFoundException(id.toString()));
+    }
+
+    public Producto editarProducto(Long id, Producto productoActualizado) {
+        Producto existente = buscarPorId(id);
+
+        // Opcional: Validar nuevo producto
+        validarProducto(productoActualizado);
+
+        // Actualizamos solo los campos permitidos
+        existente.setNombre(productoActualizado.getNombre());
+        existente.setPrecio(productoActualizado.getPrecio());
+        existente.setCantidadEnStock(productoActualizado.getCantidadEnStock());
+        existente.setDescripcion(productoActualizado.getDescripcion());
+        existente.setCantidadAComprar(productoActualizado.getCantidadAComprar());
+
+        return repository.save(existente);
+    }
+
+    public void eliminarProducto(Long id) {
+        Producto producto = buscarPorId(id);
+        repository.delete(producto);
+    }
+
+    public List<Producto> buscarPorNombre(String busqueda) {
+        String termino = busqueda.toLowerCase();
+        List<Producto> productos = repository.findAll();
+        List<Producto> resultados = new ArrayList<>();
+
+        for (Producto producto : productos) {
+            if (producto.getNombre() != null &&
+                producto.getNombre().toLowerCase().contains(termino)) {
+                resultados.add(producto);
+            }
         }
 
-        public Producto editarProducto(Long id, Double nuevoPrecio){
-            Producto encontrado = this.buscarPorId(id);
-            encontrado.setPrecio(nuevoPrecio);
-            this.repository.save(encontrado); //esto guarda en la base de datos para borrar es igual pero con delete
-            return encontrado;
+        return resultados;
+    }
+
+
+    private void validarProducto(Producto producto) {
+        if (producto.getPrecio() == null || producto.getPrecio() < 0) {
+            throw new IllegalArgumentException("El precio no puede ser negativo ni nulo.");
         }
-        
-          // DELETE
-        public Producto eliminarProducto(Long id) {
-            Producto encontrado = this.buscarPorId(id);
-        
-            this.repository.delete(encontrado);
-        
-            return encontrado;
+        if (producto.getCantidadEnStock() < 0) {
+            throw new IllegalArgumentException("El stock no puede ser negativo.");
         }
+    }
+}
 
 }
