@@ -10,5 +10,5 @@ import talentotech.java.proyectointegrador.Entity.Producto;
 
 
 public interface ProductoRepository extends JpaRepository<Producto , Long> {
-    
+        
 }

@@ -4,7 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import talentotech.java.proyectointegrador.Dto.ProductResponseDTO;
 import talentotech.java.proyectointegrador.Entity.Producto;
@@ -25,12 +29,11 @@ public class ProductoService {
         return this.repository.findAll();
     }
 
-    public ProductResponseDTO agregarProducto(Producto producto) {
-        validarProducto(producto); // validación
-        repository.save(producto);
-        ProductResponseDTO responseDTO = new ProductResponseDTO();
-        responseDTO.setMessage("Producto creado correctamente");
-        return responseDTO;
+    public Producto agregarProducto(Producto producto){
+        // Podriamos hacer validaciones de negocio antes de enviar el producto a guardar
+        Producto productoGuardado = this.repository.save(producto);
+    
+        return productoGuardado;
     }
 
     public Producto buscarPorId(Long id) {
@@ -41,16 +44,27 @@ public class ProductoService {
     public Producto editarProducto(Long id, Producto productoActualizado) {
         Producto existente = buscarPorId(id);
 
-        // Opcional: Validar nuevo producto
+    
         validarProducto(productoActualizado);
 
-        // Actualizamos solo los campos permitidos
+        // Actualizo los campos del producto existente
         existente.setNombre(productoActualizado.getNombre());
         existente.setPrecio(productoActualizado.getPrecio());
         existente.setCantidadEnStock(productoActualizado.getCantidadEnStock());
         existente.setDescripcion(productoActualizado.getDescripcion());
-        existente.setCantidadAComprar(productoActualizado.getCantidadAComprar());
-
+        // Recuerda eliminar esta línea si aún la tienes, como sugerimos antes:
+        // existente.setCantidadAComprar(productoActualizado.getCantidadAComprar());
+    
+        // Actualizar los nuevos campos (categoría e imagenUrl) si los estás pasando
+        // Asegúrate de que estos campos estén en tu entidad Producto y DTO
+        // y que los estás enviando en el JSON de Insomnia.
+        if (productoActualizado.getCategoria() != null && !productoActualizado.getCategoria().trim().isEmpty()) {
+            existente.setCategoria(productoActualizado.getCategoria());
+        }
+        if (productoActualizado.getImagenUrl() != null && !productoActualizado.getImagenUrl().trim().isEmpty()) {
+            existente.setImagenUrl(productoActualizado.getImagenUrl());
+        }
+    
         return repository.save(existente);
     }
 
@@ -74,6 +88,7 @@ public class ProductoService {
         return resultados;
     }
 
+    
 
     private void validarProducto(Producto producto) {
         if (producto.getPrecio() == null || producto.getPrecio() < 0) {
@@ -83,6 +98,7 @@ public class ProductoService {
             throw new IllegalArgumentException("El stock no puede ser negativo.");
         }
     }
+    
 }
 
-}
+

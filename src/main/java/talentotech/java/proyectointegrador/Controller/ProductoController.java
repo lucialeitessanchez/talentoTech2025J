@@ -15,6 +15,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/producto") //la ruta principal urlbase de producto
 public class ProductoController {
 
@@ -34,6 +36,11 @@ public class ProductoController {
     //contructor producto
     public ProductoController(ProductoService productoService){
         this.service = productoService;
+    }
+
+    @PostMapping("/")
+    public ResponseEntity<Producto> createProduct(@RequestBody Producto producto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(this.service.agregarProducto(producto));
     }
     
     @GetMapping("/{id}")

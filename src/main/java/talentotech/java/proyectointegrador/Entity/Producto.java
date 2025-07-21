@@ -18,19 +18,21 @@ public class Producto {
     private String nombre;
     private Double precio;
     private int cantidadEnStock;
-    private int cantidadAComprar;
     private String descripcion;
+    private String categoria; // <-- NUEVO: Atributo para la categoría del producto
+    private String imagenUrl; // <
 
     public Producto() {
     }
 
-    public Producto(String nombre, Double precio, int cantidadEnStock,String descripcion) {
+    public Producto(String nombre, Double precio,String descripcion,String categoria,String imagenUrl) {
         
         this.nombre = nombre;
         this.precio = precio;
         this.cantidadEnStock = cantidadEnStock;
-        this.cantidadAComprar = 0;
         this.descripcion = descripcion;
+        this.categoria = categoria; // <-- AÑADIR AL CONSTRUCTOR
+        this.imagenUrl = imagenUrl; // <-- AÑADIR AL CONSTRUCTOR
     }
 
 
