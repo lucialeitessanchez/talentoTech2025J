@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map; // Necesario para Map
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/pedidos")
 public class PedidoController {
 
