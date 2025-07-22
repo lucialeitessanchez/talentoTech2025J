@@ -15,13 +15,13 @@ El sistema deberá hacer uso de variables, operadores, colecciones (listas), POO
 4) Eliminar producto
 5) Crear un pedido
 6) Listar pedidos
-7) Salir
+
 
 ## 🛠️ Tecnologías Utilizadas
 
-- **Frontend**: -
-- **Backend**: Java
-- **Base de Datos**: -
+- **Frontend**: https://lucialeitessanchez.github.io/TalentoTech2024/ - JavaScript - HMTL - CSS
+- **Backend**: Java - Spring Boot
+- **Base de Datos**: H2
 
 
 ## 📦 Instalación
